@@ -31,8 +31,12 @@ namespace MusicPlayer
             refitSettings.ContentSerializer = new NewtonsoftJsonContentSerializer(jsonSettings);
 
             var api = RestService.For<IMusicPlayerAPI>(HOST, refitSettings);
+            var defaultCover = ImageSource.FromResource("MusicPlayer.Resources.defaultCover.png", typeof(App));
+            var defaultArtist = ImageSource.FromResource("MusicPlayer.Resources.defaultArtist.png", typeof(App));
 
             DependencyHelper.Builder.RegisterInstance(api);
+            DependencyHelper.Builder.RegisterInstance(defaultCover).Named<ImageSource>("defaultCover");
+            DependencyHelper.Builder.RegisterInstance(defaultArtist).Named<ImageSource>("defaultArtist");
 
             DependencyHelper.BuildContainer();
             DependencyResolver.ResolveUsing(type => DependencyHelper.Container.IsRegistered(type) ? DependencyHelper.Container.Resolve(type) : null);

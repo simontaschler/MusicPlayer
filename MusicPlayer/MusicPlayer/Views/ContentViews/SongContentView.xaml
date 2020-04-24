@@ -6,13 +6,26 @@
              mc:Ignorable="d"
              x:Class="MusicPlayer.Views.ContentViews.SongContentView">
     <ContentView.Content>
-        <StackLayout Spacing="3">
-            <Label x:Name="Title"
-                   FontSize="15"
-                   FontAttributes="Bold"/>
-            <Label x:Name="Artists"
-                   FontSize="13"/>
-        </StackLayout>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
+            <Image x:Name="Cover"
+                   Aspect="AspectFill"/>
+            <StackLayout Grid.Column="1" 
+                         Grid.Row="0" 
+                         Spacing="1">
+                <Label x:Name="Title"
+                       FontSize="15"
+                       FontAttributes="Bold"/>
+                <Label x:Name="Artists"
+                       FontSize="13"/>
+            </StackLayout>
+        </Grid>
     </ContentView.Content>
     <ContentView.GestureRecognizers>
         <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>

@@ -13,16 +13,26 @@ namespace MusicPlayer.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ArtistsPage : ContentPage
     {
+        private bool Loaded = false;
+
         public ArtistsPage()
         {
             InitializeComponent();
             BindingContext = new ArtistsViewModel();
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            if (Loaded)
+                return;
             InsertArtists();
+            Loaded = true;
         }
 
         private void ArtistTapped(object sender, ContentViews.ArtistEventArgs e)
         {
-            //Navigate to ArtistDetailPage
+            Navigation.PushAsync(new ArtistDetailPage(e.Artist));
         }
 
         private async void InsertArtists() 

@@ -14,6 +14,7 @@ namespace MusicPlayer.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class AlbumDetailPage : ContentPage
     {
+        private bool Loaded = false;
         private Dictionary<Label, Artist> ArtistLabels;
 
         public AlbumDetailPage(Album album)
@@ -24,9 +25,18 @@ namespace MusicPlayer.Views
             InsertSongs();
         }
 
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            if (Loaded)
+                return;
+            InsertSongs();
+            Loaded = true;
+        }
+
         private void ArtistTapped(object sender, EventArgs e) 
         {
-            //Navigate to ArtistDetailPage
+            Navigation.PushAsync(new ArtistDetailPage(ArtistLabels[(Label)sender]));
         }
 
         private void Song_Tapped(object sender, ContentViews.SongEventArgs e)

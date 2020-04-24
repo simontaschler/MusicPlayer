@@ -17,11 +17,21 @@ namespace MusicPlayer.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class AlbumsPage : ContentPage
     {
+        private bool Loaded = false;
+
         public AlbumsPage()
         {
             InitializeComponent();
             BindingContext = new AlbumsViewModel();
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            if (Loaded)
+                return;
             InsertAlbums();
+            Loaded = true;
         }
 
         private void AlbumTapped(object sender, AlbumEventArgs e)

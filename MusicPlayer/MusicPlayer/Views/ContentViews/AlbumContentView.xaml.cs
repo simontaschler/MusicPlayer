@@ -1,4 +1,6 @@
-﻿using MusicPlayer.Models;
+﻿using Autofac;
+using MusicPlayer.Helpers;
+using MusicPlayer.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +22,7 @@ namespace MusicPlayer.Views.ContentViews
             InitializeComponent();
             Album = album ?? throw new ArgumentException();
             Title.Text = Album.Title;
-            Cover.Source = Album.CoverImage ?? ImageSource.FromResource("MusicPlayer.Resources.defaultCover.png", typeof(AlbumContentView));
+            Cover.Source = Album.CoverImage ?? DependencyHelper.Container.ResolveNamed<ImageSource>("defaultCover");
         }
 
         public event EventHandler<AlbumEventArgs> Tapped;

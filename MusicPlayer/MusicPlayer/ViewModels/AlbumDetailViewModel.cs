@@ -1,4 +1,6 @@
-﻿using MusicPlayer.Models;
+﻿using Autofac;
+using MusicPlayer.Helpers;
+using MusicPlayer.Models;
 using MusicPlayer.Services;
 using MusicPlayer.Views.ContentViews;
 using System;
@@ -16,7 +18,7 @@ namespace MusicPlayer.ViewModels
         public AlbumDetailViewModel(Album album)
         {
             Album = album ?? throw new ArgumentException();
-            Cover = Album.CoverImage;
+            Cover = Album.CoverImage ?? DependencyHelper.Container.ResolveNamed<ImageSource>("defaultCover");
             AlbumTitle = Album.Title;
             Year = Album.ReleaseYear;
         }
@@ -37,7 +39,7 @@ namespace MusicPlayer.ViewModels
             foreach (var song in songs) 
             {
                 var artists = await api.GetSongArtistNames(song.SongID);
-                contentViews.Add(new SongContentView(song, artists));
+                contentViews.Add(new SongContentView(song, artists, Cover));
             }
             return contentViews;
         }

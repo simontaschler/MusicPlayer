@@ -1,4 +1,6 @@
-﻿using MusicPlayer.Models;
+﻿using Autofac;
+using MusicPlayer.Helpers;
+using MusicPlayer.Models;
 using MusicPlayer.Services;
 using System;
 using System.Collections.Generic;
@@ -16,12 +18,13 @@ namespace MusicPlayer.Views.ContentViews
     {
         private readonly Song Song;
 
-        public SongContentView(Song song, List<string> artists)
+        public SongContentView(Song song, List<string> artists, ImageSource cover)
         {
             InitializeComponent();
             Song = song;
             Title.Text = song.Title;
             Artists.Text = string.Join(", ", artists);
+            Cover.Source = cover ?? DependencyHelper.Container.ResolveNamed<ImageSource>("defaultCover"); 
         }
 
         public event EventHandler<SongEventArgs> Tapped;
