@@ -14,7 +14,7 @@ namespace MusicPlayer
 {
     public partial class App : Application
     {
-        public static readonly string HOST = "http://10.10.50.10/MusicPlayer";
+        public static readonly string HOST = "http://10.10.50.17/MusicPlayer";
 
         public App()
         {
@@ -30,12 +30,7 @@ namespace MusicPlayer
             };
             refitSettings.ContentSerializer = new NewtonsoftJsonContentSerializer(jsonSettings);
 
-            var httpClient = new HttpClient
-            {
-                BaseAddress = new Uri(HOST),
-                Timeout = TimeSpan.FromSeconds(10)
-            };
-            var api = RestService.For<IMusicPlayerAPI>(httpClient, refitSettings);
+            var api = RestService.For<IMusicPlayerAPI>(HOST, refitSettings);
 
             DependencyHelper.Builder.RegisterInstance(api);
 
