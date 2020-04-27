@@ -9,12 +9,14 @@ using MusicPlayer.Helpers;
 using Autofac;
 using Xamarin.Forms.Internals;
 using System.Net.Http;
+using System.Collections.Generic;
+using MusicPlayer.Models;
 
 namespace MusicPlayer
 {
     public partial class App : Application
     {
-        public static readonly string HOST = "http://10.10.50.17/MusicPlayer";
+        public static readonly string HOST = "http://10.10.50.5/MusicPlayer";
 
         public App()
         {
@@ -35,12 +37,15 @@ namespace MusicPlayer
             var defaultArtist = ImageSource.FromResource("MusicPlayer.Resources.defaultArtist.png", typeof(App));
 
             DependencyHelper.Builder.RegisterInstance(api);
+            DependencyHelper.Builder.RegisterInstance(new List<Song>());
             DependencyHelper.Builder.RegisterInstance(defaultCover).Named<ImageSource>("defaultCover");
             DependencyHelper.Builder.RegisterInstance(defaultArtist).Named<ImageSource>("defaultArtist");
+            DependencyHelper.Builder.RegisterInstance(new AppShell());
+            
 
             DependencyHelper.BuildContainer();
             DependencyResolver.ResolveUsing(type => DependencyHelper.Container.IsRegistered(type) ? DependencyHelper.Container.Resolve(type) : null);
-            MainPage = new AppShell();
+            MainPage = DependencyService.Resolve<AppShell>();
         }
 
         protected override void OnSleep()

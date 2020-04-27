@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Net;
 using System.Text;
 
 namespace MusicPlayer.Models
@@ -11,5 +13,26 @@ namespace MusicPlayer.Models
         public string FileAddress { get; set; }
         public int AlbumID { get; set; }
         public int Position { get; set; }
+
+        private Stream _audio;
+        public Stream Audio 
+        {
+            get 
+            {
+                try
+                {
+                    if (_audio == null)
+                    {
+                        var byteArray = new WebClient().DownloadData(App.HOST + FileAddress);
+                        _audio = new MemoryStream(byteArray);
+                    }
+                    return _audio;
+                }
+                catch (Exception)
+                {
+                    return null;
+                }
+            }
+        }
     }
 }

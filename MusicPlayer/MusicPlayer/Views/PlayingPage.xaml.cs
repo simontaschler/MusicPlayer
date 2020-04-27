@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MusicPlayer.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,13 @@ namespace MusicPlayer.Views
         public PlayingPage()
         {
             InitializeComponent();
+            BindingContext = new PlayingViewModel();
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            ((PlayingViewModel)BindingContext).Test();
         }
     }
 }

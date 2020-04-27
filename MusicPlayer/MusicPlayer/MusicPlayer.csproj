@@ -8,6 +8,10 @@
   <ItemGroup>
     <None Remove="Resources\defaultArtist.png" />
     <None Remove="Resources\defaultCover.PNG" />
+    <None Remove="Resources\nextButton.png" />
+    <None Remove="Resources\pauseButton.png" />
+    <None Remove="Resources\playButton.png" />
+    <None Remove="Resources\previousButton.png" />
     <None Remove="Resources\splashLogo.png" />
   </ItemGroup>
 
@@ -15,6 +19,7 @@
     <PackageReference Include="Autofac" Version="5.1.2" />
     <PackageReference Include="morelinq" Version="3.3.2" />
     <PackageReference Include="Refit" Version="5.1.67" />
+    <PackageReference Include="Xam.Plugin.SimpleAudioPlayer" Version="1.4.0" />
     <PackageReference Include="Xamarin.Forms" Version="4.3.0.908675" />  
     <PackageReference Include="Xamarin.Essentials" Version="1.3.1" />
   </ItemGroup>
@@ -22,6 +27,10 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\defaultArtist.png" />
     <EmbeddedResource Include="Resources\defaultCover.png" />
+    <EmbeddedResource Include="Resources\nextButton.png" />
+    <EmbeddedResource Include="Resources\pauseButton.png" />
+    <EmbeddedResource Include="Resources\playButton.png" />
+    <EmbeddedResource Include="Resources\previousButton.png" />
   </ItemGroup>
 
   <ItemGroup>
