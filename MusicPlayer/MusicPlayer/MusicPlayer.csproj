@@ -6,11 +6,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\albumIcon.png" />
+    <None Remove="Resources\artistIcon.png" />
     <None Remove="Resources\defaultArtist.png" />
     <None Remove="Resources\defaultCover.PNG" />
     <None Remove="Resources\nextButton.png" />
     <None Remove="Resources\pauseButton.png" />
     <None Remove="Resources\playButton.png" />
+    <None Remove="Resources\playerIcon.png" />
     <None Remove="Resources\previousButton.png" />
     <None Remove="Resources\splashLogo.png" />
   </ItemGroup>
@@ -25,11 +28,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Resources\albumIcon.png" />
+    <EmbeddedResource Include="Resources\artistIcon.png" />
     <EmbeddedResource Include="Resources\defaultArtist.png" />
     <EmbeddedResource Include="Resources\defaultCover.png" />
     <EmbeddedResource Include="Resources\nextButton.png" />
     <EmbeddedResource Include="Resources\pauseButton.png" />
     <EmbeddedResource Include="Resources\playButton.png" />
+    <EmbeddedResource Include="Resources\playerIcon.png" />
     <EmbeddedResource Include="Resources\previousButton.png" />
   </ItemGroup>
 

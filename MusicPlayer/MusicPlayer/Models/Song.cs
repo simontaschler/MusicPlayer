@@ -35,25 +35,27 @@ namespace MusicPlayer.Models
             return Cover;
         }
 
-        private Stream _audio;
         public Stream Audio 
         {
             get 
             {
                 try
                 {
-                    if (_audio == null)
-                    {
-                        var byteArray = new WebClient().DownloadData(App.HOST + FileAddress);
-                        _audio = new MemoryStream(byteArray);
-                    }
-                    return _audio;
+                    var byteArray = new WebClient().DownloadData(App.HOST + FileAddress);
+                    return new MemoryStream(byteArray);
                 }
                 catch (Exception)
                 {
                     return null;
                 }
             }
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Song song)
+                return song.SongID == SongID;
+            return false;
         }
     }
 }

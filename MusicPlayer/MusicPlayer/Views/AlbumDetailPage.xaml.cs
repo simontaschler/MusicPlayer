@@ -1,5 +1,6 @@
 ﻿using MusicPlayer.Models;
 using MusicPlayer.ViewModels;
+using MusicPlayer.Views.ContentViews;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,8 +22,6 @@ namespace MusicPlayer.Views
         {
             InitializeComponent();
             BindingContext = new AlbumDetailViewModel(album);
-            InsertArtists();
-            InsertSongs();
         }
 
         protected override void OnAppearing()
@@ -30,32 +29,33 @@ namespace MusicPlayer.Views
             base.OnAppearing();
             if (Loaded)
                 return;
+            InsertArtists();
             InsertSongs();
             Loaded = true;
         }
 
-        private void ArtistTapped(object sender, EventArgs e) 
-        {
+        private void ArtistTapped(object sender, EventArgs e) => 
             Navigation.PushAsync(new ArtistDetailPage(ArtistLabels[(Label)sender]));
-        }
 
-        private void Song_Tapped(object sender, ContentViews.SongEventArgs e)
-        {
-            //start playing song
-        }
+        private void Song_Tapped(object sender, SongEventArgs e) => 
+            ((AlbumDetailViewModel)BindingContext).SongTappedCommand.Execute(e.Song);
 
         private async void InsertSongs() 
         {
             SongContainer.Children.Clear();
             var songs = await ((AlbumDetailViewModel)BindingContext).LoadSongs();
 
-            var firstSong = songs.FirstOrDefault();
-            firstSong.Tapped += Song_Tapped;
-            SongContainer.Children.Add(firstSong);
+            if (songs.Count == 0)
+                return;
+
+            var firstSongView = new SongContentView(songs.FirstOrDefault());
+            firstSongView.Tapped += Song_Tapped;
+            SongContainer.Children.Add(firstSongView);
 
             foreach (var song in songs.Skip(1)) 
             {
-                song.Tapped += Song_Tapped;
+                var songView = new SongContentView(song);
+                songView.Tapped += Song_Tapped;
                 var separator = new BoxView
                 {
                     HeightRequest = 1,
@@ -63,7 +63,7 @@ namespace MusicPlayer.Views
                     BackgroundColor = Color.Gray
                 };
                 SongContainer.Children.Add(separator);
-                SongContainer.Children.Add(song);
+                SongContainer.Children.Add(songView);
             }
         }
 

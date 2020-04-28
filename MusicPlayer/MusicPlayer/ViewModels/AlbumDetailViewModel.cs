@@ -14,6 +14,10 @@ namespace MusicPlayer.ViewModels
     public class AlbumDetailViewModel : BaseViewModel
     {
         private readonly Album Album;
+        private List<Song> Songs;
+
+        private Command _songTappedCommand;
+        public Command SongTappedCommand => _songTappedCommand ?? (_songTappedCommand = new Command(SongTapped));
 
         public AlbumDetailViewModel(Album album)
         {
@@ -23,6 +27,17 @@ namespace MusicPlayer.ViewModels
             Year = Album.ReleaseYear;
         }
 
+        private void SongTapped(object songObject) 
+        {
+            var playlist = DependencyService.Resolve<List<Song>>();
+            playlist.Clear();
+            playlist.AddRange(Songs);
+            var loadPlaylist = DependencyHelper.Container.ResolveNamed<Command>("loadPlaylist");
+            loadPlaylist.Execute(songObject);
+            var shell = DependencyService.Resolve<AppShell>();
+            shell.GoToAsync("//tabbar/player/playingpage");
+        }
+
         public async Task<List<Artist>> LoadArtists() 
         {
             var api = DependencyService.Resolve<IMusicPlayerAPI>();
@@ -30,19 +45,19 @@ namespace MusicPlayer.ViewModels
             return artists;
         }
 
-        public async Task<List<SongContentView>> LoadSongs() 
+        public async Task<List<Song>> LoadSongs() 
         {
             var api = DependencyService.Resolve<IMusicPlayerAPI>();
             var songs = await api.GetAlbumSongs(Album.AlbumID);
 
-            var contentViews = new List<SongContentView>();
             foreach (var song in songs) 
             {
                 song.ArtistNames = await api.GetSongArtistNames(song.SongID);
                 song.Cover = Cover;
-                contentViews.Add(new SongContentView(song));
             }
-            return contentViews;
+
+            Songs = songs;
+            return Songs;
         }
 
         private ImageSource _cover;

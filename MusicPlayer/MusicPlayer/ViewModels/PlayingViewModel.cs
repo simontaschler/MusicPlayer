@@ -1,4 +1,6 @@
-﻿using MusicPlayer.Models;
+﻿using Autofac;
+using MusicPlayer.Helpers;
+using MusicPlayer.Models;
 using MusicPlayer.Services;
 using MusicPlayer.Views;
 using Plugin.SimpleAudioPlayer;
@@ -19,6 +21,9 @@ namespace MusicPlayer.ViewModels
         private readonly ImageSource PlayImage;
         private readonly ImageSource PauseImage;
 
+        private Command _loadPlaylistCommand;
+        public Command LoadPlaylistCommand => _loadPlaylistCommand ?? (_loadPlaylistCommand = new Command(LoadPlaylist));
+
         private Command _playCommand;
         public Command PlayCommand => _playCommand ?? (_playCommand = new Command(Play));
 
@@ -36,29 +41,30 @@ namespace MusicPlayer.ViewModels
             Player = CrossSimpleAudioPlayer.CreateSimpleAudioPlayer();
             PlayImage = ImageSource.FromResource("MusicPlayer.Resources.playButton.png", typeof(PlayingViewModel));
             PauseImage = ImageSource.FromResource("MusicPlayer.Resources.pauseButton.png", typeof(PlayingViewModel));
+            Cover = ImageSource.FromResource("MusicPlayer.Resources.defaultCover.png", typeof(PlayingViewModel));
             ButtonImage = PlayImage;
             DurationValue = .1;
             PositionValue = 0;
         }
 
-        public async void Test() 
-        {
-            //Test
-            var api = DependencyService.Resolve<IMusicPlayerAPI>();
-            var songs = await api.GetAlbumSongs(1);
-            var song = songs.FirstOrDefault();
-            await LoadSong(song);
-        }
-
-        public async Task LoadPlaylist(int startIndex = 0) 
+        private async void LoadPlaylist(object songObject) 
         {
             var playlist = DependencyService.Resolve<List<Song>>();
-            var playingSong = playlist.ElementAtOrDefault(startIndex) ?? Playlist.FirstOrDefault();
+
+            var index = 0;
+            if (songObject != null && songObject is Song song)
+            {
+                var indexOf = playlist.IndexOf(song);
+                index = indexOf > 0 ? indexOf : index;
+            }
+
+            var playingSong = playlist.ElementAtOrDefault(index) ?? Playlist.FirstOrDefault();
             if (playingSong == null)
                 return;
             Playlist = playlist;
-            CurrentIndex = startIndex;
+            CurrentIndex = index;
             await LoadSong(playingSong);
+            Play();
         }
 
         private async Task LoadSong(Song song) 
@@ -91,6 +97,7 @@ namespace MusicPlayer.ViewModels
 
         private async void Previous() 
         {
+            Player.Pause();
             if (Player.CurrentPosition > 1) 
             {
                 Player.Seek(0);
@@ -108,6 +115,7 @@ namespace MusicPlayer.ViewModels
 
         private async void Next() 
         {
+            Player.Pause();
             if (CurrentIndex == Playlist.Count() - 1)
                 CurrentIndex = 0;
             else
@@ -120,7 +128,10 @@ namespace MusicPlayer.ViewModels
         private void DragCompleted() 
         {
             if (PositionValue != Player.CurrentPosition && PositionValue != Player.Duration)
+            {
                 Player.Seek(PositionValue);
+                PositionText = TimeSpan.FromSeconds(PositionValue).ToString(@"m\:ss");
+            }
         }
 
         private bool UpdatePosition() 

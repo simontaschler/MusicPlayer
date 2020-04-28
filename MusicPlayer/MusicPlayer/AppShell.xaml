@@ -26,15 +26,5 @@
         </ResourceDictionary>
     </Shell.Resources>
 
-    <TabBar>
-        <Tab Title="Artists" Icon="tab_feed.png">
-            <ShellContent ContentTemplate="{DataTemplate local:ArtistsPage}" />
-        </Tab>
-        <Tab Title="Albums" Icon="tab_about.png">
-            <ShellContent ContentTemplate="{DataTemplate local:AlbumsPage}" />
-        </Tab>
-        <Tab Title="Playing" Icon="tab_about.png">
-            <ShellContent ContentTemplate="{DataTemplate local:PlayingPage}" />
-        </Tab>
-    </TabBar>
+    <TabBar x:Name="Tabbar" Route="tabbar"/>
 </Shell>

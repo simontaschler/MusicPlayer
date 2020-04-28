@@ -1,5 +1,6 @@
 ﻿using MusicPlayer.Models;
 using MusicPlayer.ViewModels;
+using MusicPlayer.Views.ContentViews;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,15 +33,11 @@ namespace MusicPlayer.Views
             Loaded = true;
         }
 
-        private void AlbumTapped(object sender, ContentViews.AlbumEventArgs e)
-        {
+        private void AlbumTapped(object sender, AlbumEventArgs e) => 
             Navigation.PushAsync(new AlbumDetailPage(e.Album));
-        }
 
-        private void Song_Tapped(object sender, ContentViews.SongEventArgs e)
-        {
-            //start playing song
-        }
+        private void Song_Tapped(object sender, SongEventArgs e) =>
+            ((ArtistDetailViewModel) BindingContext).SongTappedCommand.Execute(e.Song);
 
         private async void InsertAlbums()
         {
@@ -51,13 +48,14 @@ namespace MusicPlayer.Views
                 return;
 
             AlbumsHeader.IsVisible = true;
-            var firstAlbum = albums.FirstOrDefault();
-            firstAlbum.Tapped += AlbumTapped;
-            AlbumContainer.Children.Add(firstAlbum);
+            var firstAlbumView = new AlbumContentView(albums.FirstOrDefault());
+            firstAlbumView.Tapped += AlbumTapped;
+            AlbumContainer.Children.Add(firstAlbumView);
 
             foreach (var album in albums.Skip(1))
             {
-                album.Tapped += AlbumTapped;
+                var albumView = new AlbumContentView(album);
+                albumView.Tapped += AlbumTapped;
                 var separator = new BoxView
                 {
                     HeightRequest = 1,
@@ -65,7 +63,7 @@ namespace MusicPlayer.Views
                     BackgroundColor = Color.Gray
                 };
                 AlbumContainer.Children.Add(separator);
-                AlbumContainer.Children.Add(album);
+                AlbumContainer.Children.Add(albumView);
             }
         }
 
@@ -74,13 +72,17 @@ namespace MusicPlayer.Views
             SongContainer.Children.Clear();
             var songs = await ((ArtistDetailViewModel)BindingContext).LoadSongs();
 
-            var firstSong = songs.FirstOrDefault();
-            firstSong.Tapped += Song_Tapped;
-            SongContainer.Children.Add(firstSong);
+            if (songs.Count == 0)
+                return;
+
+            var firstSongView = new SongContentView(songs.FirstOrDefault());
+            firstSongView.Tapped += Song_Tapped;
+            SongContainer.Children.Add(firstSongView);
 
             foreach (var song in songs.Skip(1))
             {
-                song.Tapped += Song_Tapped;
+                var songView = new SongContentView(song);
+                songView.Tapped += Song_Tapped;
                 var separator = new BoxView
                 {
                     HeightRequest = 1,
@@ -88,7 +90,7 @@ namespace MusicPlayer.Views
                     BackgroundColor = Color.Gray
                 };
                 SongContainer.Children.Add(separator);
-                SongContainer.Children.Add(song);
+                SongContainer.Children.Add(songView);
             }
         }
     }

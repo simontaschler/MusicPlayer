@@ -20,11 +20,5 @@ namespace MusicPlayer.Views
             PreviousButton.Source = ImageSource.FromResource("MusicPlayer.Resources.previousButton.png", typeof(PlayingPage));
             NextButton.Source = ImageSource.FromResource("MusicPlayer.Resources.nextButton.png", typeof(PlayingPage));
         }
-
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-            ((PlayingViewModel)BindingContext).Test();
-        }
     }
 }

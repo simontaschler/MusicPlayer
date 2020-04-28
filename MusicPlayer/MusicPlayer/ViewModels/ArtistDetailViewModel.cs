@@ -16,6 +16,10 @@ namespace MusicPlayer.ViewModels
     public class ArtistDetailViewModel : BaseViewModel
     {
         private readonly Artist Artist;
+        private List<Song> Songs;
+
+        private Command _songTappedCommand;
+        public Command SongTappedCommand => _songTappedCommand ?? (_songTappedCommand = new Command(SongTapped));
 
         public ArtistDetailViewModel(Artist artist)
         {
@@ -24,38 +28,39 @@ namespace MusicPlayer.ViewModels
             ArtistImage = Artist.ArtistImage ?? DependencyHelper.Container.ResolveNamed<ImageSource>("defaultArtist");
         }
 
-        public async Task<List<SongContentView>> LoadSongs() 
+        private void SongTapped(object songObject)
+        {
+            var playlist = DependencyService.Resolve<List<Song>>();
+            playlist.Clear();
+            playlist.AddRange(Songs);
+            var loadPlaylist = DependencyHelper.Container.ResolveNamed<Command>("loadPlaylist");
+            loadPlaylist.Execute(songObject);
+            var shell = DependencyService.Resolve<AppShell>();
+            shell.GoToAsync("//tabbar/player/playingpage");
+        }
+
+        public async Task<List<Song>> LoadSongs() 
         {
             var api = DependencyService.Resolve<IMusicPlayerAPI>();
             var songs = await api.GetArtistSongs(Artist.ArtistID);
             var albumCovers = await api.GetAlbumCovers(Artist.ArtistID);
 
-            var contentViews = new List<SongContentView>();
             foreach (var song in songs) 
             {
                 var cover = albumCovers.Where(q => q.AlbumID == song.AlbumID).FirstOrDefault()?.CoverImage;
                 song.ArtistNames = await api.GetSongArtistNames(song.SongID);
                 song.Cover = cover;
-                var contentView = new SongContentView(song);
-                contentViews.Add(contentView);
             }
 
-            return contentViews;
+            Songs = songs;
+            return Songs;
         }
 
-        public async Task<List<AlbumContentView>> LoadAlbums() 
+        public async Task<List<Album>> LoadAlbums() 
         {
             var api = DependencyService.Resolve<IMusicPlayerAPI>();
             var albums = await api.GetArtistAlbums(Artist.ArtistID);
-
-            var contentViews = new List<AlbumContentView>();
-            foreach (var album in albums) 
-            {
-                var contentView = new AlbumContentView(album);
-                contentViews.Add(contentView);
-            }
-
-            return contentViews;
+            return albums;
         }
 
         private ImageSource _artistImage;

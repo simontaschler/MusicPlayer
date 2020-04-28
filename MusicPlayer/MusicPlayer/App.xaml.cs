@@ -11,6 +11,7 @@ using Xamarin.Forms.Internals;
 using System.Net.Http;
 using System.Collections.Generic;
 using MusicPlayer.Models;
+using MusicPlayer.ViewModels;
 
 namespace MusicPlayer
 {
@@ -35,12 +36,15 @@ namespace MusicPlayer
             var api = RestService.For<IMusicPlayerAPI>(HOST, refitSettings);
             var defaultCover = ImageSource.FromResource("MusicPlayer.Resources.defaultCover.png", typeof(App));
             var defaultArtist = ImageSource.FromResource("MusicPlayer.Resources.defaultArtist.png", typeof(App));
+            var player = new PlayingPage();
+            var loadPlaylistCommand = ((PlayingViewModel)player.BindingContext).LoadPlaylistCommand;
 
             DependencyHelper.Builder.RegisterInstance(api);
             DependencyHelper.Builder.RegisterInstance(new List<Song>());
             DependencyHelper.Builder.RegisterInstance(defaultCover).Named<ImageSource>("defaultCover");
             DependencyHelper.Builder.RegisterInstance(defaultArtist).Named<ImageSource>("defaultArtist");
-            DependencyHelper.Builder.RegisterInstance(new AppShell());
+            DependencyHelper.Builder.RegisterInstance(loadPlaylistCommand).Named<Command>("loadPlaylist");
+            DependencyHelper.Builder.RegisterInstance(new AppShell(player));
             
 
             DependencyHelper.BuildContainer();
