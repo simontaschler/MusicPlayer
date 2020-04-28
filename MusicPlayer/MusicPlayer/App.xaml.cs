@@ -16,7 +16,7 @@ namespace MusicPlayer
 {
     public partial class App : Application
     {
-        public static readonly string HOST = "http://10.10.50.5/MusicPlayer";
+        public static readonly string HOST = "http://10.10.50.1/MusicPlayer";
 
         public App()
         {

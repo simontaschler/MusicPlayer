@@ -34,8 +34,9 @@ namespace MusicPlayer.ViewModels
             foreach (var song in songs) 
             {
                 var cover = albumCovers.Where(q => q.AlbumID == song.AlbumID).FirstOrDefault()?.CoverImage;
-                var artists = await api.GetSongArtistNames(song.SongID);
-                var contentView = new SongContentView(song, artists, cover);
+                song.ArtistNames = await api.GetSongArtistNames(song.SongID);
+                song.Cover = cover;
+                var contentView = new SongContentView(song);
                 contentViews.Add(contentView);
             }
 

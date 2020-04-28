@@ -18,13 +18,13 @@ namespace MusicPlayer.Views.ContentViews
     {
         private readonly Song Song;
 
-        public SongContentView(Song song, List<string> artists, ImageSource cover)
+        public SongContentView(Song song)
         {
             InitializeComponent();
             Song = song;
             Title.Text = song.Title;
-            Artists.Text = string.Join(", ", artists);
-            Cover.Source = cover ?? DependencyHelper.Container.ResolveNamed<ImageSource>("defaultCover"); 
+            Artists.Text = string.Join(", ", song.ArtistNames);
+            Cover.Source = song.Cover ?? DependencyHelper.Container.ResolveNamed<ImageSource>("defaultCover"); 
         }
 
         public event EventHandler<SongEventArgs> Tapped;

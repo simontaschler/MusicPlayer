@@ -37,10 +37,13 @@ namespace MusicPlayer.Services
         [Get("/index.php/Album/getSongs/{albumID}")]
         Task<List<Song>> GetAlbumSongs(int albumID);
 
+        [Get("/index.php/Album/getCover/{albumID}")]
+        Task<string> GetAlbumCover(int albumID);
+
         [Get("/index.php/Song/getArtists/{songID}")]
         Task<List<Artist>> GetSongArtists(int songID);
         
         [Get("/index.php/Song/getArtistNames/{songID}")]
-        Task<List<string>> GetSongArtistNames(int songID);
+        Task<List<string>> GetSongArtistNames(int songID);        
     }
 }

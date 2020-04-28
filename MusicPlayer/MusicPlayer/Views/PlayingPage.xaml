@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:behaviors="clr-namespace:MusicPlayer.Behaviors"
              mc:Ignorable="d"
              x:Class="MusicPlayer.Views.PlayingPage">
     <ContentPage.Content>
@@ -26,10 +27,19 @@
                    Aspect="AspectFit"/>
             <StackLayout Grid.Row="3"
                          Grid.Column="1"
-                         Spacing="15">
+                         Spacing="0">
+                <Label x:Name="SongTitle"
+                       Text="{Binding SongTitle}"
+                       FontSize="32"
+                       FontAttributes="Bold"/>
+                <Label x:Name="Artists"
+                       Text="{Binding Artists}"
+                       FontSize="18"/>
                 <Grid>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="15"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="15"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="40"/>
@@ -37,19 +47,26 @@
                         <ColumnDefinition Width="40"/>
                     </Grid.ColumnDefinitions>
                     <Label x:Name="PositionLabel"
-                           Grid.Row="0"
+                           Grid.Row="1"
                            Grid.Column="0"
                            Text="{Binding PositionText}"
                            FontSize="16"/>
-                    <Slider x:Name="Position"
-                            Grid.Row="0"
+                    <Slider x:Name="PositionSlider"
+                            Grid.Row="1"
                             Grid.Column="1"
-                            Value="{Binding Position}"
-                            HorizontalOptions="CenterAndExpand"
-                            BackgroundColor="LightGray"
-                            ThumbColor="Gray"/>
+                            Minimum="0"
+                            Maximum="{Binding DurationValue}"
+                            Value="{Binding PositionValue}"
+                            WidthRequest="{Binding Path=ActualWidth}"
+                            MinimumTrackColor="LightBlue"
+                            MaximumTrackColor="LightGray"
+                            ThumbColor="Gray">
+                        <Slider.Behaviors>
+                            <behaviors:EventToCommandBehavior EventName="DragCompleted" Command="{Binding DragCompletedCommand}"/>
+                        </Slider.Behaviors>
+                    </Slider>
                     <Label x:Name="DurationLabel"
-                           Grid.Row="0"
+                           Grid.Row="1"
                            Grid.Column="2"
                            Text="{Binding DurationText}"
                            FontSize="16"/>
@@ -70,21 +87,22 @@
                     <ImageButton x:Name="PreviousButton"
                                  Grid.Row="0"
                                  Grid.Column="1"
-                                 Source="Resources.previousButton.png"
                                  Command="{Binding PreviousCommand}"
-                                 Aspect="AspectFit"/>
-                    <ImageButton x:Name="PlayPauseButton"
+                                 Aspect="AspectFit"
+                                 BackgroundColor="Transparent"/>
+                    <ImageButton x:Name="PlayButton"
                                  Grid.Row="0"
                                  Grid.Column="3"
-                                 Source="Resources.playButton.png"
+                                 Source="{Binding ButtonImage}"
                                  Command="{Binding PlayCommand}"
-                                 Aspect="AspectFit"/>
+                                 Aspect="AspectFit"
+                                 BackgroundColor="Transparent"/>
                     <ImageButton x:Name="NextButton"
                                  Grid.Row="0"
                                  Grid.Column="5"
-                                 Source="Resources.nextButton.png"
                                  Command="{Binding NextCommand}"
-                                 Aspect="AspectFit"/>
+                                 Aspect="AspectFit"
+                                 BackgroundColor="Transparent"/>
                 </Grid>
             </StackLayout>
         </Grid>

@@ -38,8 +38,9 @@ namespace MusicPlayer.ViewModels
             var contentViews = new List<SongContentView>();
             foreach (var song in songs) 
             {
-                var artists = await api.GetSongArtistNames(song.SongID);
-                contentViews.Add(new SongContentView(song, artists, Cover));
+                song.ArtistNames = await api.GetSongArtistNames(song.SongID);
+                song.Cover = Cover;
+                contentViews.Add(new SongContentView(song));
             }
             return contentViews;
         }

@@ -17,6 +17,8 @@ namespace MusicPlayer.Views
         {
             InitializeComponent();
             BindingContext = new PlayingViewModel();
+            PreviousButton.Source = ImageSource.FromResource("MusicPlayer.Resources.previousButton.png", typeof(PlayingPage));
+            NextButton.Source = ImageSource.FromResource("MusicPlayer.Resources.nextButton.png", typeof(PlayingPage));
         }
 
         protected override void OnAppearing()
