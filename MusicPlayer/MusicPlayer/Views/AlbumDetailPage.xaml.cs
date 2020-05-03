@@ -38,7 +38,7 @@ namespace MusicPlayer.Views
             Navigation.PushAsync(new ArtistDetailPage(ArtistLabels[(Label)sender]));
 
         private void Song_Tapped(object sender, SongEventArgs e) => 
-            ((AlbumDetailViewModel)BindingContext).SongTappedCommand.Execute(e.Song);
+            ((AlbumDetailViewModel)BindingContext).PlayCommand.Execute(e.Song);
 
         private async void InsertSongs() 
         {
@@ -71,11 +71,12 @@ namespace MusicPlayer.Views
         {
             ArtistLabels = new Dictionary<Label, Artist>();
             var artists = await ((AlbumDetailViewModel)BindingContext).LoadArtists();
+            var last = artists.Last();
             var nextColumn = 0;
             foreach (var artist in artists) 
             {
                 ArtistContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-                var labelText = nextColumn != 0 ? ", " + artist.Name : artist.Name;
+                var labelText = artist.Equals(last) ? artist.Name : artist.Name + ",";
                 var label = new Label
                 {
                     Text = labelText,

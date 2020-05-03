@@ -28,7 +28,7 @@ namespace MusicPlayer.Models
                     }
                     return _coverImage;
                 }
-                catch (Exception) 
+                catch (Exception e) 
                 {
                     return null;
                 }

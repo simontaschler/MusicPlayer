@@ -1,4 +1,6 @@
-﻿using MusicPlayer.Models;
+﻿using Autofac;
+using MusicPlayer.Helpers;
+using MusicPlayer.Models;
 using MusicPlayer.ViewModels;
 using MusicPlayer.Views.ContentViews;
 using System;
@@ -9,6 +11,7 @@ using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using static Xamarin.Forms.Button;
 
 namespace MusicPlayer.Views
 {
@@ -37,7 +40,7 @@ namespace MusicPlayer.Views
             Navigation.PushAsync(new AlbumDetailPage(e.Album));
 
         private void Song_Tapped(object sender, SongEventArgs e) =>
-            ((ArtistDetailViewModel) BindingContext).SongTappedCommand.Execute(e.Song);
+            ((ArtistDetailViewModel) BindingContext).PlayCommand.Execute(e.Song);
 
         private async void InsertAlbums()
         {

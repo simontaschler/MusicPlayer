@@ -39,6 +39,7 @@ namespace MusicPlayer.ViewModels
         public PlayingViewModel() 
         {
             Player = CrossSimpleAudioPlayer.CreateSimpleAudioPlayer();
+            Player.PlaybackEnded += PlaybackEnded;
             PlayImage = ImageSource.FromResource("MusicPlayer.Resources.playButton.png", typeof(PlayingViewModel));
             PauseImage = ImageSource.FromResource("MusicPlayer.Resources.pauseButton.png", typeof(PlayingViewModel));
             Cover = ImageSource.FromResource("MusicPlayer.Resources.defaultCover.png", typeof(PlayingViewModel));
@@ -46,6 +47,9 @@ namespace MusicPlayer.ViewModels
             DurationValue = .1;
             PositionValue = 0;
         }
+
+        private void PlaybackEnded(object sender, EventArgs e) =>
+            Next();
 
         private async void LoadPlaylist(object songObject) 
         {

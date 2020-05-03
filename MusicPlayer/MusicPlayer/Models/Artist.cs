@@ -33,5 +33,12 @@ namespace MusicPlayer.Models
                 }
             }
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Artist artist)
+                return artist.ArtistID == ArtistID;
+            return false;
+        }
     }
 }

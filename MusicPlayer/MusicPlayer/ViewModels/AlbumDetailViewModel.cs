@@ -16,8 +16,8 @@ namespace MusicPlayer.ViewModels
         private readonly Album Album;
         private List<Song> Songs;
 
-        private Command _songTappedCommand;
-        public Command SongTappedCommand => _songTappedCommand ?? (_songTappedCommand = new Command(SongTapped));
+        private Command _playCommand;
+        public Command PlayCommand => _playCommand ?? (_playCommand = new Command(Play));
 
         public AlbumDetailViewModel(Album album)
         {
@@ -27,7 +27,7 @@ namespace MusicPlayer.ViewModels
             Year = Album.ReleaseYear;
         }
 
-        private void SongTapped(object songObject) 
+        private void Play(object songObject) 
         {
             var playlist = DependencyService.Resolve<List<Song>>();
             playlist.Clear();
